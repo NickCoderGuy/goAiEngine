@@ -3,13 +3,18 @@ from piece import Piece
 
 class Board:
   def __init__(self,cell_size) -> None:
-    self.state = [[0 for i in range(NUM_LINES)] for j in range(NUM_LINES)]
     #black starts first
     self.turn = 0
+    # state of the board
     self.board = []
+    
     self.selected_piece = None
     self.white_left = 180
     self.black_left = 181
+    
+    self.black_captures = 0
+    self.white_captures = 0
+    
     self.cell_size = cell_size 
     self.create_board()
     
@@ -19,8 +24,11 @@ class Board:
   def get_pieces_left(self):
     return self.white_left,self.black_left
   
-  def move(self,piece):  
-    if piece.color == GRAY:
+  def get_captures(self):
+    return self.white_captures,self.black_captures
+  
+  def move(self,piece): 
+    if piece != None and piece.color == GRAY:
       # since the piece is gray, it is not placed yet
       piece.move(self.turn)
       # if it is white's turn, then the piece is white and vice versa
@@ -31,7 +39,10 @@ class Board:
       self.turn += 1
     
   def get_piece(self,row,col):
-    return self.board[row][col]
+    if(row >= ROWS or col >= COLS or row < 0 or col < 0):
+      return None
+    piece = self.board[row][col]
+    return piece
   
   # create the board by adding pieces to the board that are gray
   def create_board(self):

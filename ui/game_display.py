@@ -114,11 +114,12 @@ class GameDisplay:
         
         white_left,black_left = self.board.get_pieces_left()
         turn = self.board.get_turn()
-        
+        white_captures,black_captures = self.board.get_captures()
+
         # draw the text to display the number of pieces left
         
-        self.screen.blit(pygame.font.SysFont('Arial', 20).render('White pieces left: ' + str(white_left), True, WHITE), (self.SAFE_AREA // 2, self.pixel_size + self.SAFE_AREA + 20))
-        self.screen.blit(pygame.font.SysFont('Arial', 20).render('Black pieces left: ' + str(black_left), True, WHITE), (self.SAFE_AREA // 2, self.pixel_size + self.SAFE_AREA + 40))
+        self.screen.blit(pygame.font.SysFont('Arial', 20).render('White pieces left: ' + str(white_left) + ' White Captures: ' + str(white_captures), True, WHITE), (self.SAFE_AREA // 2, self.pixel_size + self.SAFE_AREA + 20))
+        self.screen.blit(pygame.font.SysFont('Arial', 20).render('Black pieces left: ' + str(black_left) + ' Black Captures: ' + str(black_captures), True, WHITE), (self.SAFE_AREA // 2, self.pixel_size + self.SAFE_AREA + 40))
         
         # draw the text to display whose turn it is
         
