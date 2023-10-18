@@ -110,7 +110,6 @@ class GameDisplay:
         self.screen.blit(controls_surface, (self.SAFE_AREA // 2, self.pixel_size + self.SAFE_AREA))
         self.screen.blit(board_surface, (self.SAFE_AREA // 2, self.SAFE_AREA // 2))
         
-        #self.board.re_recreate_board(self.cell_size)
         self.board.draw(self.screen,self.cell_size)
         
         white_left,black_left = self.board.get_pieces_left()

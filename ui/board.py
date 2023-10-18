@@ -39,20 +39,13 @@ class Board:
       self.board.append([])
       for col in range(COLS):
           self.board[row].append(Piece(row,col,GRAY,self.cell_size))   
-          
-  def re_recreate_board(self,cell_size):
-    self.cell_size = cell_size
-    self.board = []
-    for row in range(ROWS):
-      for col in range(COLS):
-          piece = self.get_piece(row,col)
-          self.board[row][col] = Piece(row,col,piece.color,self.cell_size)
-          
+            
   # draw the board
   def draw(self,win,cell_size):
     self.cell_size = cell_size
     for row in range(ROWS):
       for col in range(COLS):
         piece = self.board[row][col]
+        piece.setCellSize(self.cell_size)
         if piece != 0:
           piece.draw(win)     
