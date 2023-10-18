@@ -1,5 +1,5 @@
 
-from constants import BLACK,WHITE,GRAY,BACKGROUND,CELL_SIZE
+from constants import BLACK,WHITE,GRAY
 import pygame   
 
 # the piece class is used to represent the pieces on the board
@@ -31,7 +31,7 @@ class Piece:
         
     # draw the piece on the board
     def draw(self, win):
-        radius = CELL_SIZE/2 - self.PADDING
+        radius = self.cell_size/2 - self.PADDING
         pygame.draw.circle(win, GRAY, (self.x,self.y),radius + self.BORDER )
         pygame.draw.circle(win, self.color, (self.x,self.y),radius)
 
