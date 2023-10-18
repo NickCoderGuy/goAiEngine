@@ -19,8 +19,12 @@ class Piece:
         
     # calculate the position of the piece on the board
     def calc_pos(self):
-        self.x = self.cell_size * self.col + self.cell_size // 2
-        self.y = self.cell_size * self.row + self.cell_size // 2
+        self.x = (self.cell_size * self.col + self.cell_size // 2)
+        self.y = (self.cell_size * self.row + self.cell_size // 2)
+        
+    def setCellSize(self,cell_size):
+        self.cell_size = cell_size
+        self.calc_pos()
         
     # move the piece to the board by changing the color
     def move(self,turn):
