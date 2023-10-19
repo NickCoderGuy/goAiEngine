@@ -16,13 +16,18 @@ def changeTurn():
         turn_counter = WHITE
     else:
         turn_counter = BLACK
+
+def endGame():
+    return
 def passTurn():
     global turn_counter, pass_counter
     changeTurn()
     pass_counter += 1
+    if pass_counter == 2:
+        endGame()
 
 def resign():
-
+    endGame()
 
 def placePiece(x, y):
     global turn_counter, pass_counter, board
