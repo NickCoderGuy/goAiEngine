@@ -2,7 +2,7 @@ from constants import BLACK,NUM_LINES,ROWS,COLS,GRAY,CELL_SIZE
 from piece import Piece
 
 class Board:
-  def __init__(self,cell_size) -> None:
+  def __init__(self,cell_size,safe_area) -> None:
     #black starts first
     self.turn = 0
     # state of the board
@@ -16,6 +16,7 @@ class Board:
     self.white_captures = 0
     
     self.cell_size = cell_size 
+    self.SAFE_AREA = safe_area
     self.create_board()
     
   def get_turn(self):
@@ -49,7 +50,7 @@ class Board:
     for row in range(ROWS):
       self.board.append([])
       for col in range(COLS):
-          self.board[row].append(Piece(row,col,GRAY,self.cell_size))   
+          self.board[row].append(Piece(row,col,GRAY,self.cell_size, self.SAFE_AREA))   
             
   # draw the board
   def draw(self,win,cell_size):
@@ -59,4 +60,12 @@ class Board:
         piece = self.board[row][col]
         piece.setCellSize(self.cell_size)
         if piece != 0:
-          piece.draw(win)     
+          piece.draw(win)
+
+  def to_string(self):
+    for row in range(ROWS):
+      for col in range(COLS):
+        piece = self.board[row][col]
+        print(piece,end=" ")
+      print()
+    print()

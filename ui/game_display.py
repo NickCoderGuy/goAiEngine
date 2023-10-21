@@ -15,16 +15,15 @@ class GameDisplay:
 
         self.pixel_size = 540
         self.cell_size = self.pixel_size // self.NUM_LINES
-        self.board = Board(self.cell_size)
-
+        self.board = Board(self.cell_size, self.SAFE_AREA)
         # Height of the button section
 
         self.set_up_pygame()
 
     def get_row_col_from_mouse(self, pos):
         x, y = pos
-        row = y // self.cell_size
-        col = x // self.cell_size
+        row = (y - self.SAFE_AREA // 2 + self.cell_size // 2) // self.cell_size 
+        col = (x - self.SAFE_AREA // 2 + self.cell_size // 2) // self.cell_size
         return row, col
 
     def set_up_pygame(self):
@@ -54,7 +53,7 @@ class GameDisplay:
                         (self.pixel_size + self.SAFE_AREA, self.window_height), pygame.RESIZABLE)
 
                 # this is for mouse click
-                if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:
                     # get the location of the mouse click
                     row, col = self.get_row_col_from_mouse(
                         pygame.mouse.get_pos())
@@ -62,6 +61,7 @@ class GameDisplay:
                     piece = self.board.get_piece(row, col)
                     # move the piece
                     self.board.move(piece)
+                    
 
                 if event.type == pygame.MOUSEMOTION:
                     # row, col = self.get_row_col_from_mouse(pygame.mouse.get_pos())
