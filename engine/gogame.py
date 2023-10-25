@@ -2,7 +2,7 @@ import numpy as np
 from scipy import ndimage
 from sklearn import preprocessing
 
-from gym_go import state_utils, govars
+from engine import state_utils, govars
 
 """
 The state of the game is a numpy array
