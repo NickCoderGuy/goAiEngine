@@ -1,5 +1,5 @@
 
-from constants import BLACK,WHITE,GRAY
+from ui.constants import BLACK,WHITE,GRAY
 import pygame   
 
 # the piece class is used to represent the pieces on the board

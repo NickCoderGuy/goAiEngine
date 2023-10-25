@@ -1,5 +1,5 @@
-from constants import BLACK,NUM_LINES,ROWS,COLS,GRAY,CELL_SIZE
-from piece import Piece
+from ui.constants import BLACK,NUM_LINES,ROWS,COLS,GRAY,CELL_SIZE
+from ui.piece import Piece
 
 class Board:
   def __init__(self,cell_size,safe_area) -> None:
