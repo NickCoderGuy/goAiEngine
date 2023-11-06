@@ -1,17 +1,18 @@
 
-from constants import BLACK,WHITE,GRAY
+from ui.constants import BLACK,WHITE,GRAY
 import pygame   
 
 # the piece class is used to represent the pieces on the board
 class Piece:
-    PADDING = 9
+    PADDING = 0
     BORDER = 2
     
-    def __init__(self,row,col,color,cell_size):
+    def __init__(self, row, col, color, cell_size, safe_area):
         self.row = row
         self.col = col
         self.color = color
         self.cell_size = cell_size
+        self.SAFE_AREA = safe_area
          
         self.x = 0
         self.y = 0
@@ -19,8 +20,8 @@ class Piece:
         
     # calculate the position of the piece on the board
     def calc_pos(self):
-        self.x = (self.cell_size * self.col + self.cell_size // 2)
-        self.y = (self.cell_size * self.row + self.cell_size // 2)
+        self.x = (self.cell_size * self.col) + self.SAFE_AREA // 2
+        self.y = (self.cell_size * self.row) + self.SAFE_AREA // 2
         
     def setCellSize(self,cell_size):
         self.cell_size = cell_size
@@ -35,12 +36,14 @@ class Piece:
         
     # draw the piece on the board
     def draw(self, win):
-        radius = self.cell_size/2 - self.PADDING
+        radius = self.cell_size//3 - self.PADDING
         pygame.draw.circle(win, GRAY, (self.x,self.y),radius + self.BORDER )
         pygame.draw.circle(win, self.color, (self.x,self.y),radius)
 
     def __repr__(self):
         return str(self.color)
-        
+    
+    def __str__(self):
+        return str(self.color)
         
         
