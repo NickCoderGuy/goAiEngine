@@ -9,3 +9,5 @@ PASS_CHNL = 4
 DONE_CHNL = 5
 
 NUM_CHNLS = 6
+
+SIZE = 19
