@@ -61,8 +61,9 @@ class GameDisplay:
             self.pixel_size // self.NUM_LINES) - (2 * self.BORDER_SIZE // self.NUM_LINES)
         self.window_height = self.pixel_size + \
             self.CONTROLS_HEIGHT + (1.5 * self.SAFE_AREA)
-        self.window_width = self.pixel_size + self.SAFE_AREA + 2 * self.board_padding
         self.board_padding = self.cell_size
+        self.window_width = self.pixel_size + self.SAFE_AREA + 2 * self.board_padding
+        
         self.screen = self.pygame.display.set_mode((self.window_width, self.window_height), self.pygame.RESIZABLE)
 
         if self.current_screen == "main_menu":
