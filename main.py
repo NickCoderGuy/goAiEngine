@@ -1,20 +1,40 @@
 import pygame
 import random
 from ui.game_display import GameDisplay
+import ui.constants as constants
+
+CLOCK = pygame.time.Clock()
 
 def main():
-    run_ui()
-   
-def run_ui():
     # Initialize Pygame
     pygame.init()
+    game_display = GameDisplay(pygame)
+    main_menu(game_display)
+    run_ui(game_display)
 
-    # Define the standard Go board (19x19) with initial empty intersections
+def main_menu(game_display):
+    running = True
+    while running:
+        CLOCK.tick(constants.FPS)
+        hover_start, hover_quit = game_display.display_main_menu()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.VIDEORESIZE:
+                game_display.resize(event.size)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    if hover_start:
+                        game_display.set_current_screen("game")
+                        return
+                    elif hover_quit:
+                        pygame.quit()
+
+def run_ui(game_display):
+    # Define the example Go board (19x19) with initial empty intersections
     size = 19
     example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
-
-    # Create a GameDisplay object
-    game_display = GameDisplay(pygame)
 
     # Call the display_board method to display the board
     game_display.display_board(example_go_board_state)
@@ -22,6 +42,7 @@ def run_ui():
     # Main game loop
     running = True
     while running:
+        CLOCK.tick(constants.FPS)
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
