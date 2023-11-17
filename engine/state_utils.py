@@ -2,7 +2,7 @@ import numpy as np
 from scipy import ndimage
 from scipy.ndimage import measurements
 
-from gym_go import govars
+from engine import govars
 
 group_struct = np.array([[[0, 0, 0],
                           [0, 0, 0],
