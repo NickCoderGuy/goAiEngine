@@ -1,4 +1,5 @@
 from ui.constants import BLACK, WHITE, BACKGROUND, DARK_GRAY
+import os
 
 
 class GameDisplay:
@@ -139,9 +140,11 @@ class GameDisplay:
         margin = self.window_width // 2 - button_width // 2
 
         start_button_rect = self.pygame.Rect(margin, self.window_height // 2, button_width, button_height)
+        against_cpu_rect = self.pygame.Rect(margin, self.window_height // 1.72, button_width, button_height)
         quit_button_rect = self.pygame.Rect(margin, self.window_height // 1.5, button_width, button_height)
 
         hover_start = start_button_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_cpu = against_cpu_rect.collidepoint(self.pygame.mouse.get_pos())
         hover_quit = quit_button_rect.collidepoint(self.pygame.mouse.get_pos())
 
         # Draw the background
@@ -149,10 +152,31 @@ class GameDisplay:
 
         # Draw buttons
         self.draw_button("Start Game", start_button_rect, hover_start)
+        self.draw_button("CPU", against_cpu_rect, hover_cpu)
         self.draw_button("Quit", quit_button_rect, hover_quit)
 
         self.pygame.display.flip()
-        return hover_start, hover_quit
+        return hover_start, hover_cpu, hover_quit
+
+    def display_options(self):
+        button_width = self.pixel_size // 2
+        button_height = 50
+        margin = self.window_width // 2 - button_width // 2
+
+        # Draw the background
+        self.screen.fill(BACKGROUND)
+
+        index = 0
+        buttons = []
+        options = []
+        for entry in os.listdir("AIlist/"):
+            buttons.append(self.pygame.Rect(margin, self.window_height // (index + 1.5), button_width, button_height))
+            options.append(buttons[index].collidepoint(self.pygame.mouse.get_pos()))
+            self.draw_button(entry, buttons[index], options[index])
+            index += 1
+
+        self.pygame.display.flip()
+        return options
 
     def draw_button(self, text, rect, hover):
         # Define fonts
