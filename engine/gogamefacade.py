@@ -15,6 +15,6 @@ def pass_turn(state):
 
 
 def make_turn(state, x, y):
-    position = ((x - 1) * govars.SIZE) + y
+    position = (x * govars.SIZE) + y
     new_state = gogame.next_state(state, position)
     return new_state

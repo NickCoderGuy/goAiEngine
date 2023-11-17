@@ -2,6 +2,7 @@ import pygame
 import random
 from ui.game_display import GameDisplay
 import ui.constants as constants
+import os
 
 CLOCK = pygame.time.Clock()
 
@@ -16,7 +17,7 @@ def main_menu(game_display):
     running = True
     while running:
         CLOCK.tick(constants.FPS)
-        hover_start, hover_quit = game_display.display_main_menu()
+        hover_start, hover_cpu, hover_quit = game_display.display_main_menu()
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -28,8 +29,32 @@ def main_menu(game_display):
                     if hover_start:
                         game_display.set_current_screen("game")
                         return
+                    elif hover_cpu:
+                        pick_cpu(game_display)
+                        return
                     elif hover_quit:
                         pygame.quit()
+
+def pick_cpu(game_display):
+    running = True
+    while running:
+        CLOCK.tick(constants.FPS)
+        options = game_display.display_options()
+
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+            if event.type == pygame.VIDEORESIZE:
+                game_display.resize(event.size)
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left mouse button
+                    index = 0
+                    for entry in os.listdir("AIlist/"):
+                        if options[index]:
+                            print(entry)
+                            game_display.set_current_screen("game")
+                            return
+                        index += 1
 
 def run_ui(game_display):
     # Define the example Go board (19x19) with initial empty intersections
