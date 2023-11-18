@@ -1,4 +1,4 @@
-from ui.constants import BLACK, WHITE, BACKGROUND, DARK_GRAY
+from ui.constants import BLACK, WHITE, BACKGROUND, DARK_GRAY, GREEN, OLIVE, BLUE,FIREBRICK
 import os
 
 
@@ -79,15 +79,14 @@ class GameDisplay:
             (self.pixel_size + self.SAFE_AREA + 2 * self.board_padding, self.window_height))
         background_surface.fill(BACKGROUND)
 
-        # Create a controls surface
-        controls_surface = self.pygame.Surface(
-            (self.pixel_size + 2 * self.board_padding, self.CONTROLS_HEIGHT))
-        controls_surface.fill(BLACK)
+        # # Create a controls surface
+        # controls_surface = self.pygame.Surface(
+        #     (self.pixel_size + 2 * self.board_padding, self.CONTROLS_HEIGHT))
+        # controls_surface.fill(BLACK)
 
         # Draw buttons or other elements on the control surface
         # For example:
         # self.pygame.draw.rect(controls_surface, (255, 0, 0), (0, 0, 100, self.CONTROLS_HEIGHT))
-
         # Create a board surface and fill it with the background color
 
         # self.board_padding = self.cell_size
@@ -123,15 +122,94 @@ class GameDisplay:
                         board_surface, WHITE, (self.cell_size * col + self.board_padding, self.cell_size * row + self.board_padding), self.cell_size // 2 - 1)
 
         self.screen.blit(background_surface, (0, 0))
-        self.screen.blit(controls_surface, (self.SAFE_AREA //
-                         2, self.pixel_size + self.SAFE_AREA))
+        # self.screen.blit(controls_surface, (self.SAFE_AREA //
+        #                   2, self.pixel_size + self.SAFE_AREA))
         # Blit the background and board surfaces on the main screen
         self.screen.blit(
             board_surface, (self.SAFE_AREA // 2, self.SAFE_AREA // 2))
 
         # Update the screen
         self.pygame.display.flip()
+        
+    def display_ui_controls(self):
+                # Create a controls surface
+        controls_surface = self.pygame.Surface(
+            (self.pixel_size + 2 * self.board_padding, self.CONTROLS_HEIGHT * .9))
+        controls_surface.fill(FIREBRICK)
 
+        # count the amount of black and white pieces to get turn
+        black = 0
+        white = 0
+                
+        for row in range(len(self.pieces_array)):
+            for col in range(len(self.pieces_array[row])):
+                if self.pieces_array[row][col] == 1:
+                    black += 1
+                elif self.pieces_array[row][col] == 2:
+                    white += 1
+                    
+        # if black is greater than white then it is whites turn
+        if black > white:
+            self.pygame.draw.circle(controls_surface, WHITE, (self.cell_size * 3, self.CONTROLS_HEIGHT // 2), self.cell_size // 2 - 1)
+        else:
+            self.pygame.draw.circle(controls_surface, BLACK, (self.cell_size * 3, self.CONTROLS_HEIGHT // 2), self.cell_size // 2 - 1)
+            
+        # draw the forward and back buttons
+        back_arrow = self.pygame.image.load("ui/images/left-arrow.png")
+        forward_arrow = self.pygame.image.load("ui/images/right-arrow.png")
+        pass_button = self.pygame.image.load("ui/images/curve-down-arrow.png")
+        resign_button = self.pygame.image.load("ui/images/finish.png")
+        exit_button = self.pygame.image.load("ui/images/logout.png")
+        download_button = self.pygame.image.load("ui/images/downloads.png")
+        
+
+        # put the forward arrow on the forward button in to the controls surface
+        forward_arrow = self.pygame.transform.scale(forward_arrow, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        back_arrow = self.pygame.transform.scale(back_arrow, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        resign_button = self.pygame.transform.scale(resign_button, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        pass_button = self.pygame.transform.scale(pass_button, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        exit_button = self.pygame.transform.scale(exit_button, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        download_button = self.pygame.transform.scale(download_button, (self.cell_size, self.CONTROLS_HEIGHT // 2))
+        
+        # move the buttons to the correct position
+        back_rect = back_arrow.get_rect()
+        forward_rect = forward_arrow.get_rect()
+        pass_rect = pass_button.get_rect()
+        resign_rect = resign_button.get_rect()
+        exit_rect = exit_button.get_rect()
+        download_rect = download_button.get_rect()
+        
+        # this sets the position of the buttons. change these to change button locations (width, height)
+        back_rect.center = (self.cell_size * 5, self.pixel_size + self.SAFE_AREA * 2.5)
+        forward_rect.center = (self.cell_size * 7, self.pixel_size + self.SAFE_AREA * 2.5)
+        resign_rect.center = (self.cell_size * 9, self.pixel_size + self.SAFE_AREA * 2.5)
+        pass_rect.center = (self.cell_size * 11, self.pixel_size + self.SAFE_AREA * 2.5)
+        exit_rect.center = (self.cell_size * 13, self.pixel_size + self.SAFE_AREA * 2.5)
+        download_rect.center = (self.cell_size * 15, self.pixel_size + self.SAFE_AREA * 2.5)
+        
+        # set the controls surface
+        self.screen.blit(controls_surface, (self.SAFE_AREA //
+                    2, self.pixel_size + self.SAFE_AREA * 1.5))
+        
+        # blit the buttons to the control surface
+        self.screen.blit(back_arrow, back_rect)        
+        self.screen.blit(forward_arrow, forward_rect)
+        self.screen.blit(resign_button, resign_rect)
+        self.screen.blit(pass_button, pass_rect)
+        self.screen.blit(exit_button, exit_rect)
+        self.screen.blit(download_button, download_rect)
+        
+        # get if the mouse is hovering over the buttons
+        hover_forward = forward_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_back = back_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_resign = resign_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_pass = pass_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_exit = exit_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_download = download_rect.collidepoint(self.pygame.mouse.get_pos())
+        
+        self.pygame.display.flip()
+
+        return hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download
 
     def display_main_menu(self):
         self.pygame.display.set_caption("Go")

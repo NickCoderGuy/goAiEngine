@@ -68,12 +68,35 @@ def run_ui(game_display):
     running = True
     while running:
         CLOCK.tick(constants.FPS)
+        
+        hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.display_ui_controls()
+        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             if event.type == pygame.VIDEORESIZE:
                 game_display.resize(event.size)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # event.button == 1 means left mouse button
+
+                if hover_back:
+                    print("back")
+                    pass
+                elif hover_forward:
+                    print("forward")
+                    pass
+                elif hover_pass:
+                    print("pass move")
+                    pass
+                elif hover_exit:
+                    print("exit game")
+                    running = False
+                elif hover_resign:
+                    print("resign game")
+                    pass
+                elif hover_download:
+                    print("download/save game")
+                    pass
+                
                 # get the location of the mouse click
                 row, col = game_display.get_row_col_from_mouse(
                     pygame.mouse.get_pos())
