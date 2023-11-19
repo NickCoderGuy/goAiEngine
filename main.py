@@ -6,12 +6,24 @@ import os
 
 CLOCK = pygame.time.Clock()
 
+
 def main():
     # Initialize Pygame
     pygame.init()
     game_display = GameDisplay(pygame)
-    main_menu(game_display)
-    run_ui(game_display)
+
+    while True:
+        CLOCK.tick(constants.FPS)
+        option_selected = main_menu(game_display)
+        if option_selected == "quit":
+            pygame.quit()
+            return
+        elif option_selected == "pick_cpu":
+            print("pick cpu")
+            pick_cpu(game_display)
+        elif option_selected == "start_game":
+            run_ui(game_display)
+
 
 def main_menu(game_display):
     running = True
@@ -27,13 +39,12 @@ def main_menu(game_display):
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:  # Left mouse button
                     if hover_start:
-                        game_display.set_current_screen("game")
-                        return
+                        return "start_game"
                     elif hover_cpu:
-                        pick_cpu(game_display)
-                        return
+                        return "pick_cpu"
                     elif hover_quit:
-                        pygame.quit()
+                        return "quit"
+
 
 def pick_cpu(game_display):
     running = True
@@ -56,7 +67,9 @@ def pick_cpu(game_display):
                             return
                         index += 1
 
+
 def run_ui(game_display):
+    game_display.set_current_screen("game")
     # Define the example Go board (19x19) with initial empty intersections
     size = 19
     example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
@@ -64,13 +77,16 @@ def run_ui(game_display):
     # Call the display_board method to display the board
     game_display.display_board(example_go_board_state)
 
+    # We should put make a list of states and then when we "hover_forward", we go to the next one (unless we are at
+    # the current state) and then when we "hover_back", we go to the previous one (unless we are at the first state).
+
     # Main game loop
     running = True
     while running:
         CLOCK.tick(constants.FPS)
-        
+
         hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.display_ui_controls()
-        
+
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
@@ -89,26 +105,26 @@ def run_ui(game_display):
                     pass
                 elif hover_exit:
                     print("exit game")
-                    running = False
+                    return
                 elif hover_resign:
                     print("resign game")
                     pass
                 elif hover_download:
                     print("download/save game")
                     pass
-                
+
                 # get the location of the mouse click
                 row, col = game_display.get_row_col_from_mouse(
                     pygame.mouse.get_pos())
-                
+
                 print(row, col)
-                
+
                 # fixme implement this pseudocode ->
                 # new_state = engine.getnextstate()
                 # game_display.display_board(new_state)
-                
 
     pygame.quit()
+
 
 if __name__ == "__main__":
     main()
