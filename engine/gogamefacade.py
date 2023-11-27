@@ -12,36 +12,37 @@ class GoGameFacade():
         state = gogame.init_state(govars.SIZE)
         self.state_history = []
         self.state_history.append(state)
-        return self.serialize(state)
+        return self.__serialize(state)
 
 
     def pass_turn(self):
-        state = self.get_current_board()
+        state = self.__get_current_board()
         board_shape = state.shape[1:]
         pass_idx = np.prod(board_shape)
         new_state = gogame.next_state(state, pass_idx)
 
         self.state_history.append(state)
-        return self.serialize(new_state)
+        return self.__serialize(new_state)
 
 
     def make_move(self, x, y):
-        state = self.get_current_board()
+        state = self.__get_current_board()
         position = ((x) * govars.SIZE) + y
         new_state = gogame.next_state(state, position)
 
-        self.state_history.append(state)
-        return self.serialize(new_state)
+        self.state_history.append(new_state)
+        return self.__serialize(new_state)
 
 
-    def combine(self, black_board, white_board):
+    def __combine(self, black_board, white_board):
         full_board = black_board + (white_board * 2)
         return full_board
 
-    def serialize(self, state):
+    def __serialize(self, state):
         json_dict = {}
-        json_dict['board'] = self.combine(state[govars.BLACK], state[govars.WHITE])
+        json_dict['board'] = self.__combine(state[govars.BLACK], state[govars.WHITE])
         json_dict['turn'] = gogame.turn(state)
+        return json_dict
 
-    def get_current_board(self):
+    def __get_current_board(self):
         return self.state_history[-1]

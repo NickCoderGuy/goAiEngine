@@ -2,6 +2,7 @@ import pygame
 import random
 from ui.game_display import GameDisplay
 import ui.constants as constants
+from engine.gogamefacade import GoGameFacade
 
 CLOCK = pygame.time.Clock()
 
@@ -32,12 +33,15 @@ def main_menu(game_display):
                         pygame.quit()
 
 def run_ui(game_display):
+    engine_facade = GoGameFacade()
+    initial_state = engine_facade.new_game()['board']
     # Define the example Go board (19x19) with initial empty intersections
     size = 19
-    example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
+    # example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
 
     # Call the display_board method to display the board
-    game_display.display_board(example_go_board_state)
+    print(f"initial state is {initial_state}")
+    game_display.display_board(initial_state)
 
     # Main game loop
     running = True
@@ -56,8 +60,10 @@ def run_ui(game_display):
                 print(row, col)
                 
                 # fixme implement this pseudocode ->
+
                 # new_state = engine.getnextstate()
-                # game_display.display_board(new_state)
+                new_state = engine_facade.make_move(row, col)
+                game_display.display_board(new_state['board'])
                 
 
     pygame.quit()
