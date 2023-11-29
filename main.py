@@ -126,8 +126,9 @@ def run_ui(game_display):
                 # fixme implement this pseudocode ->
 
                 # new_state = engine.getnextstate()
-                new_state = engine_facade.make_move(row, col)
-                game_display.display_board(new_state['board'])
+                if row >= 0 and col >= 0 and row <= 18 and col <= 18:
+                    new_state = engine_facade.make_move(row, col)
+                    game_display.display_board(new_state['board'])
                 
 
     pygame.quit()
