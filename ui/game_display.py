@@ -1,4 +1,4 @@
-from ui.constants import BLACK, WHITE, BACKGROUND, DARK_GRAY, GREEN, OLIVE, BLUE, FIREBRICK
+from ui.constants import BLACK, WHITE, BACKGROUND, DARK_GRAY, GREEN, OLIVE, BLUE, FIREBRICK, TRANSPARENT
 import os
 
 
@@ -63,6 +63,7 @@ class GameDisplay:
             self.display_board(self.pieces_array)
 
     def display_board(self, new_pieces_array):
+        self.set_current_screen("game")
         self.pieces_array = new_pieces_array
         # Create a background surface and fill it with the background color
         background_surface = self.pygame.Surface(
@@ -110,15 +111,18 @@ class GameDisplay:
 
         for row in range(len(self.pieces_array)):
             for col in range(len(self.pieces_array[row])):
-                color = WHITE
+                color = None
                 if self.pieces_array[row][col] == 1:
                     color = BLACK
+                if self.pieces_array[row][col] == 2:
+                    color = WHITE
 
-                self.pygame.draw.circle(
-                    board_surface,
-                    color,
-                    (self.cell_size * col + self.board_padding, self.cell_size * row + self.board_padding),
-                    self.cell_size // 2 - 1)
+                if color is not None:
+                    self.pygame.draw.circle(
+                        board_surface,
+                        color,
+                        (self.cell_size * col + self.board_padding, self.cell_size * row + self.board_padding),
+                        self.cell_size // 2 - 1)
 
         self.screen.blit(background_surface, (0, 0))
         # self.screen.blit(controls_surface, (self.SAFE_AREA //

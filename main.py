@@ -2,6 +2,7 @@ import pygame
 import random
 from ui.game_display import GameDisplay
 import ui.constants as constants
+from engine.gogamefacade import GoGameFacade
 import os
 
 CLOCK = pygame.time.Clock()
@@ -69,13 +70,16 @@ def pick_cpu(game_display):
 
 
 def run_ui(game_display):
-    game_display.set_current_screen("game")
+    engine_facade = GoGameFacade()
+    initial_state = engine_facade.new_game()['board']
+    
     # Define the example Go board (19x19) with initial empty intersections
     size = 19
-    example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
+    # example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
 
     # Call the display_board method to display the board
-    game_display.display_board(example_go_board_state)
+    print(f"initial state is {initial_state}")
+    game_display.display_board(initial_state)
 
     # We should put make a list of states and then when we "hover_forward", we go to the next one (unless we are at
     # the current state) and then when we "hover_back", we go to the previous one (unless we are at the first state).
@@ -120,8 +124,11 @@ def run_ui(game_display):
                 print(row, col)
 
                 # fixme implement this pseudocode ->
+
                 # new_state = engine.getnextstate()
-                # game_display.display_board(new_state)
+                new_state = engine_facade.make_move(row, col)
+                game_display.display_board(new_state['board'])
+                
 
     pygame.quit()
 
