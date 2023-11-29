@@ -2,9 +2,7 @@ from engine import gogame, govars
 import numpy as np
 import json
 
-
 class GoGameFacade():
-
     def __init__(self) -> None:
         self.state_history = []
 
@@ -13,7 +11,6 @@ class GoGameFacade():
         self.state_history = []
         self.state_history.append(state)
         return self.__serialize(state)
-
 
     def pass_turn(self):
         state = self.__get_current_board()
@@ -24,7 +21,6 @@ class GoGameFacade():
         self.state_history.append(state)
         return self.__serialize(new_state)
 
-
     def make_move(self, x, y):
         state = self.__get_current_board()
         position = ((x) * govars.SIZE) + y
@@ -32,7 +28,6 @@ class GoGameFacade():
 
         self.state_history.append(new_state)
         return self.__serialize(new_state)
-
 
     def __combine(self, black_board, white_board):
         full_board = black_board + (white_board * 2)
