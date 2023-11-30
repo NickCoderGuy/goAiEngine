@@ -63,24 +63,14 @@ class GameDisplay:
             self.display_board(self.pieces_array)
 
     def display_board(self, new_pieces_array):
-        self.set_current_screen("game")
+        if self.current_screen != "game":
+            self.set_current_screen("game")
+
         self.pieces_array = new_pieces_array
         # Create a background surface and fill it with the background color
         background_surface = self.pygame.Surface(
             (self.pixel_size + self.SAFE_AREA + 2 * self.board_padding, self.window_height))
         background_surface.fill(BACKGROUND)
-
-        # # Create a controls surface
-        # controls_surface = self.pygame.Surface(
-        #     (self.pixel_size + 2 * self.board_padding, self.CONTROLS_HEIGHT))
-        # controls_surface.fill(BLACK)
-
-        # Draw buttons or other elements on the control surface
-        # For example:
-        # self.pygame.draw.rect(controls_surface, (255, 0, 0), (0, 0, 100, self.CONTROLS_HEIGHT))
-        # Create a board surface and fill it with the background color
-
-        # self.board_padding = self.cell_size
 
         board_surface = self.pygame.Surface(
             (self.pixel_size + 2 * self.board_padding, self.pixel_size + 2 * self.board_padding))
@@ -152,11 +142,9 @@ class GameDisplay:
                     white += 1
 
         # if black is greater than white then it is whites turn
-        if black > white:
-            self.pygame.draw.circle(controls_surface, WHITE, (self.cell_size * 3, self.CONTROLS_HEIGHT // 2),
-                                    self.cell_size // 2 - 1)
-        else:
-            self.pygame.draw.circle(controls_surface, BLACK, (self.cell_size * 3, self.CONTROLS_HEIGHT // 2),
+        turn_color = WHITE if black > white else BLACK
+        
+        self.pygame.draw.circle(controls_surface, turn_color, (self.cell_size * 3 + self.board_padding, self.CONTROLS_HEIGHT // 2),
                                     self.cell_size // 2 - 1)
 
         # draw the forward and back buttons
@@ -184,12 +172,12 @@ class GameDisplay:
         download_rect = download_button.get_rect()
 
         # this sets the position of the buttons. change these to change button locations (width, height)
-        back_rect.center = (self.cell_size * 5, self.pixel_size + self.SAFE_AREA * 2.5)
-        forward_rect.center = (self.cell_size * 7, self.pixel_size + self.SAFE_AREA * 2.5)
-        resign_rect.center = (self.cell_size * 9, self.pixel_size + self.SAFE_AREA * 2.5)
-        pass_rect.center = (self.cell_size * 11, self.pixel_size + self.SAFE_AREA * 2.5)
-        exit_rect.center = (self.cell_size * 13, self.pixel_size + self.SAFE_AREA * 2.5)
-        download_rect.center = (self.cell_size * 15, self.pixel_size + self.SAFE_AREA * 2.5)
+        back_rect.center = (self.cell_size * 5 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
+        forward_rect.center = (self.cell_size * 7 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
+        resign_rect.center = (self.cell_size * 9 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
+        pass_rect.center = (self.cell_size * 11 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
+        exit_rect.center = (self.cell_size * 13 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
+        download_rect.center = (self.cell_size * 15 + self.board_padding, self.pixel_size + self.SAFE_AREA * 2 + self.board_padding)
 
         # set the controls surface
         self.screen.blit(controls_surface, (self.SAFE_AREA //

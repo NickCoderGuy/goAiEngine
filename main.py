@@ -23,7 +23,10 @@ def main():
             print("pick cpu")
             pick_cpu(game_display)
         elif option_selected == "start_game":
-            run_ui(game_display)
+            exit_string = run_ui(game_display)
+            if exit_string == "quit":
+                pygame.quit()
+                return
 
 
 def main_menu(game_display):
@@ -93,7 +96,7 @@ def run_ui(game_display):
 
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                running = False
+                return "quit"
             if event.type == pygame.VIDEORESIZE:
                 game_display.resize(event.size)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # event.button == 1 means left mouse button
@@ -109,7 +112,7 @@ def run_ui(game_display):
                     pass
                 elif hover_exit:
                     print("exit game")
-                    return
+                    return "menu"
                 elif hover_resign:
                     print("resign game")
                     pass
@@ -121,16 +124,10 @@ def run_ui(game_display):
                 row, col = game_display.get_row_col_from_mouse(
                     pygame.mouse.get_pos())
 
-                print(row, col)
-
-                # fixme implement this pseudocode ->
-
-                # new_state = engine.getnextstate()
+                # print(row, col)
                 new_state = engine_facade.make_move(row, col)
                 game_display.display_board(new_state['board'])
                 
-
-    pygame.quit()
 
 
 if __name__ == "__main__":
