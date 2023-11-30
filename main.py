@@ -81,7 +81,7 @@ def run_ui(game_display):
     # example_go_board_state = [[random.choice([0, 1, 2]) for _ in range(size)] for _ in range(size)]
 
     # Call the display_board method to display the board
-    print(f"initial state is {initial_state}")
+    # print(f"initial state is {initial_state}")
     game_display.display_board(initial_state)
 
     # We should put make a list of states and then when we "hover_forward", we go to the next one (unless we are at
@@ -92,15 +92,13 @@ def run_ui(game_display):
     while running:
         CLOCK.tick(constants.FPS)
 
-        hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.display_ui_controls()
-
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 return "quit"
             if event.type == pygame.VIDEORESIZE:
                 game_display.resize(event.size)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # event.button == 1 means left mouse button
-
+                hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.get_hover(pygame.mouse.get_pos())
                 if hover_back:
                     print("back")
                     pass
@@ -123,10 +121,18 @@ def run_ui(game_display):
                 # get the location of the mouse click
                 row, col = game_display.get_row_col_from_mouse(
                     pygame.mouse.get_pos())
+                
+                new_state = None
+                # if the location is on the board, attempt to make the move
+                if row >= 0 and row < constants.ROWS and col >= 0 and col < constants.COLS:
+                    # print(row, col)
+                    new_state = engine_facade.make_move(row, col)
+                
+                
+                if new_state is not None:
+                    game_display.display_board(new_state['board'])
 
-                # print(row, col)
-                new_state = engine_facade.make_move(row, col)
-                game_display.display_board(new_state['board'])
+                
                 
 
 
