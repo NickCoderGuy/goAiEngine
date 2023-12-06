@@ -59,10 +59,10 @@ class GameDisplay:
         else:
             self.display_board(self.pieces_array)
 
-    def display_board(self, new_pieces_array):
+    def display_board(self, new_pieces_array,turn=0):
         if self.current_screen != "game":
             self.set_current_screen("game")
-
+            
         self.pieces_array = new_pieces_array
         # Create a background surface and fill it with the background color
         background_surface = self.pygame.Surface(
@@ -118,30 +118,19 @@ class GameDisplay:
         self.screen.blit(
             board_surface, (self.SAFE_AREA // 2, self.SAFE_AREA // 2))
 
-        self.display_ui_controls()
+        self.display_ui_controls(turn)
 
         # Update the screen
         self.pygame.display.flip()
 
-    def display_ui_controls(self):
+    def display_ui_controls(self,turn):
         # Create a controls surface
         control_surface_width = self.grid_size + 2 * self.board_padding
         controls_surface = self.pygame.Surface((control_surface_width, self.CONTROLS_HEIGHT))
         controls_surface.fill(BACKGROUND)
 
-        # count the amount of black and white pieces to get turn
-        black = 0
-        white = 0
-
-        for row in range(len(self.pieces_array)):
-            for col in range(len(self.pieces_array[row])):
-                if self.pieces_array[row][col] == 1:
-                    black += 1
-                elif self.pieces_array[row][col] == 2:
-                    white += 1
-
         # if black is greater than white then it is whites turn
-        turn_color = WHITE if black > white else BLACK
+        turn_color = WHITE if turn != 0 else BLACK
         
         self.pygame.draw.circle(controls_surface, turn_color, (1 * (control_surface_width / 9), self.CONTROLS_HEIGHT // 2),
                                     self.cell_size // 2 - 1)
