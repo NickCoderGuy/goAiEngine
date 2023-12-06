@@ -47,9 +47,9 @@ class GoGameFacade():
         return self.__serialize(self.state_history[index])
 
     def dump_to_file(self, filename):
-        with open(filename, "w") as file:
+        with open(filename, "wb") as file:
             pickle.dump(self.state_history, file)
     
     def load_from_file(self, filename):
-        with open(filename, "w") as file:
+        with open(filename, "rb") as file:
             self.state_history = pickle.load(file)
