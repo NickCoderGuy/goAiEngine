@@ -116,6 +116,7 @@ def run_ui(game_display):
                     pass
                 elif hover_download:
                     print("download/save game")
+                    engine_facade.dump_to_file("saved_game.pkl")
                     pass
 
                 # get the location of the mouse click
