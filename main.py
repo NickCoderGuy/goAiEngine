@@ -89,6 +89,7 @@ def run_ui(game_display):
 
     # Main game loop
     running = True
+    current_state_index = 0
     while running:
         CLOCK.tick(constants.FPS)
 
@@ -98,13 +99,20 @@ def run_ui(game_display):
             if event.type == pygame.VIDEORESIZE:
                 game_display.resize(event.size)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # event.button == 1 means left mouse button
+                
                 hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.get_hover(pygame.mouse.get_pos())
                 if hover_back:
-                    print("back")
-                    pass
+                    if current_state_index > 0:
+                        current_state_index -= 1
+                        state = engine_facade.get_state(current_state_index)
+                        game_display.display_board(state['board'])
+
                 elif hover_forward:
-                    print("forward")
-                    pass
+                    if current_state_index < len(engine_facade.state_history) - 1:
+                        current_state_index += 1
+                        state = engine_facade.get_state(current_state_index)
+                        game_display.display_board(state['board'])
+                    
                 elif hover_pass:
                     print("pass move")
                     pass
@@ -125,12 +133,23 @@ def run_ui(game_display):
                 new_state = None
                 # if the location is on the board, attempt to make the move
                 if row >= 0 and row < constants.ROWS and col >= 0 and col < constants.COLS:
-                    # print(row, col)
-                    new_state = engine_facade.make_move(row, col)
+                    # move is on board
+                    current_state_index = len(engine_facade.state_history) - 1
+                    try:
+                        new_state = engine_facade.make_move(row, col)
+                        current_state_index = len(engine_facade.state_history) - 1
+                    except:
+                        print("invalid move")
+                        # engine_facade.state_history.pop()
+                        state = engine_facade.get_state(current_state_index)
+                        game_display.display_board(state['board'])
                 
                 
                 if new_state is not None:
                     game_display.display_board(new_state['board'])
+
+                print(f"current state index is {current_state_index}")
+                print(f"length of state history is {len(engine_facade.state_history)}")
 
                 
                 
