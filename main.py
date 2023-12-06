@@ -146,7 +146,8 @@ def run_ui(game_display):
                         # engine_facade.state_history.pop()
                         state = engine_facade.get_state(current_state_index)
                         game_display.display_board(state['board'])
-                
+                        
+                turn = engine_facade.get_turn()
                 
                 if new_state is not None:
                     game_display.display_board(new_state['board'],turn)
