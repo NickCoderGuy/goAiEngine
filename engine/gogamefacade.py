@@ -41,3 +41,6 @@ class GoGameFacade():
 
     def __get_current_board(self):
         return self.state_history[-1]
+    
+    def get_state(self, index):
+        return self.__serialize(self.state_history[index])
