@@ -18,7 +18,7 @@ class GoGameFacade():
         pass_idx = np.prod(board_shape)
         new_state = gogame.next_state(state, pass_idx)
 
-        self.state_history.append(state)
+        self.state_history.append(new_state)
         return self.__serialize(new_state)
 
     def make_move(self, x, y):
@@ -41,3 +41,6 @@ class GoGameFacade():
 
     def __get_current_board(self):
         return self.state_history[-1]
+    
+    def get_turn(self):
+        return gogame.turn(self.__get_current_board())

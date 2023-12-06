@@ -99,6 +99,9 @@ def run_ui(game_display):
                 game_display.resize(event.size)
             if event.type == pygame.MOUSEBUTTONDOWN and event.button == 1:  # event.button == 1 means left mouse button
                 hover_back, hover_forward, hover_pass, hover_exit, hover_resign, hover_download = game_display.get_hover(pygame.mouse.get_pos())
+                
+                new_state = None
+
                 if hover_back:
                     print("back")
                     pass
@@ -107,7 +110,7 @@ def run_ui(game_display):
                     pass
                 elif hover_pass:
                     print("pass move")
-                    pass
+                    new_state = engine_facade.pass_turn()
                 elif hover_exit:
                     print("exit game")
                     return "menu"
@@ -122,15 +125,15 @@ def run_ui(game_display):
                 row, col = game_display.get_row_col_from_mouse(
                     pygame.mouse.get_pos())
                 
-                new_state = None
                 # if the location is on the board, attempt to make the move
                 if row >= 0 and row < constants.ROWS and col >= 0 and col < constants.COLS:
                     # print(row, col)
                     new_state = engine_facade.make_move(row, col)
-                
+                    
+                turn = engine_facade.get_turn()
                 
                 if new_state is not None:
-                    game_display.display_board(new_state['board'])
+                    game_display.display_board(new_state['board'],turn)
 
                 
                 
