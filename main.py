@@ -134,8 +134,15 @@ def run_ui(game_display):
                 # if the location is on the board, attempt to make the move
                 if row >= 0 and row < constants.ROWS and col >= 0 and col < constants.COLS:
                     # move is on board
-                    new_state = engine_facade.make_move(row, col)
                     current_state_index = len(engine_facade.state_history) - 1
+                    try:
+                        new_state = engine_facade.make_move(row, col)
+                        current_state_index = len(engine_facade.state_history) - 1
+                    except:
+                        print("invalid move")
+                        # engine_facade.state_history.pop()
+                        state = engine_facade.get_state(current_state_index)
+                        game_display.display_board(state['board'])
                 
                 
                 if new_state is not None:
