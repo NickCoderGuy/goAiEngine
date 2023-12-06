@@ -1,6 +1,7 @@
 from engine import gogame, govars
 import numpy as np
 import json
+import pickle
 
 class GoGameFacade():
     def __init__(self) -> None:
@@ -42,5 +43,16 @@ class GoGameFacade():
     def __get_current_board(self):
         return self.state_history[-1]
     
+    def get_state(self, index):
+        return self.__serialize(self.state_history[index])
+
+    def dump_to_file(self, filename):
+        with open(filename, "w") as file:
+            pickle.dump(self.state_history, file)
+    
+    def load_from_file(self, filename):
+        with open(filename, "w") as file:
+            self.state_history = pickle.load(file)
+            
     def get_turn(self):
         return gogame.turn(self.__get_current_board())
