@@ -60,9 +60,6 @@ class GameDisplay:
             self.display_board(self.pieces_array)
 
     def display_board(self, new_pieces_array,turn=0):
-        if self.current_screen != "game":
-            self.set_current_screen("game")
-            
         self.pieces_array = new_pieces_array
         # Create a background surface and fill it with the background color
         background_surface = self.pygame.Surface(
@@ -161,12 +158,13 @@ class GameDisplay:
 
         # this sets the position of the buttons. change these to change button locations (width, height)
         y_location = self.grid_size + self.SAFE_AREA + 2 * self.board_padding + self.CONTROLS_HEIGHT // 2
-        back_rect.center = (3 * (control_surface_width / 9), y_location)
-        forward_rect.center = (4 * (control_surface_width / 9), y_location)
-        resign_rect.center = (5 * (control_surface_width / 9), y_location)
-        pass_rect.center = (6 * (control_surface_width / 9), y_location)
-        exit_rect.center = (7 * (control_surface_width / 9), y_location)
-        download_rect.center = (8 * (control_surface_width / 9), y_location)
+        resign_rect.center = (3 * (control_surface_width / 9), y_location)
+        pass_rect.center = (4 * (control_surface_width / 9), y_location)
+        download_rect.center = (5 * (control_surface_width / 9), y_location)
+        back_rect.center = (6 * (control_surface_width / 9), y_location)
+        forward_rect.center = (7 * (control_surface_width / 9), y_location)
+        exit_rect.center = (8 * (control_surface_width / 9), y_location)
+        
 
         # this is necessary because the location is stored for
         # the hover function if needed
@@ -184,12 +182,14 @@ class GameDisplay:
         # for the hover function to work properly, 
         # the buttons must be blitted to the main screen,
         # not the controls surface
+        
         self.screen.blit(back_arrow, back_rect)
         self.screen.blit(forward_arrow, forward_rect)
-        self.screen.blit(resign_button, resign_rect)
-        self.screen.blit(pass_button, pass_rect)
         self.screen.blit(exit_button, exit_rect)
-        self.screen.blit(download_button, download_rect)
+        if self.current_screen != "view":
+            self.screen.blit(resign_button, resign_rect)
+            self.screen.blit(pass_button, pass_rect)
+            self.screen.blit(download_button, download_rect)
 
         
     def get_hover(self, mouse_position):
@@ -245,11 +245,19 @@ class GameDisplay:
         index = 0
         buttons = []
         options = []
-        for entry in os.listdir("saved_games/"):
-            buttons.append(self.pygame.Rect(margin, self.window_height // (index + 1.5), button_width, button_height))
+
+        entries = os.listdir("saved_games/")
+        entries.sort(reverse=True)
+
+        for entry in entries:
+            buttons.append(self.pygame.Rect(margin, self.board_padding + index * 70, button_width, button_height))
             options.append(buttons[index].collidepoint(self.pygame.mouse.get_pos()))
             self.draw_button(entry, buttons[index], options[index])
             index += 1
+            
+            # Eventually, we would want to have more than 8 games be displayed, but for now, we will only display 8
+            if index >= 8:
+                break
 
         self.pygame.display.flip()
         return options

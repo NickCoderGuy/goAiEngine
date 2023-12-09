@@ -72,6 +72,7 @@ def pick_load_game(game_display):
                             filename = "saved_games/" + entry
                             engine_facade.load_from_file(filename)
                             run_view_ui(game_display, engine_facade)
+                            return "main_menu"
                         index += 1
 
 def pick_cpu(game_display):
@@ -96,9 +97,11 @@ def pick_cpu(game_display):
                         index += 1
 
 def run_view_ui(game_display, engine_facade):
+    game_display.set_current_screen("view")
     current_state_index = len(engine_facade.state_history) - 1
     state = engine_facade.get_state(current_state_index)
     game_display.display_board(state['board'])
+    
 
     # Main game loop
     running = True
@@ -132,7 +135,6 @@ def run_view_ui(game_display, engine_facade):
                     # Don't do anything
                     pass
                 elif hover_exit:
-                    print("exit game")
                     return "menu"
                 elif hover_resign:
                     # Don't do anything
@@ -150,6 +152,7 @@ def run_view_ui(game_display, engine_facade):
 def run_ui(game_display):
     engine_facade = GoGameFacade()
     initial_state = engine_facade.new_game()['board']
+    game_display.set_current_screen("game")
     
     # Define the example Go board (19x19) with initial empty intersections
     size = 19
@@ -228,13 +231,6 @@ def run_ui(game_display):
                 
                 if new_state is not None:
                     game_display.display_board(new_state['board'],turn)
-
-                print(f"current state index is {current_state_index}")
-                print(f"length of state history is {len(engine_facade.state_history)}")
-
-                
-                
-
 
 if __name__ == "__main__":
     main()
