@@ -214,14 +214,14 @@ class GameDisplay:
                                             self.window_height // 2 + button_height + self.BUTTON_PADDING,
                                             button_width,
                                             button_height)
-        quit_button_rect = self.pygame.Rect(margin,
+        load_game_rect = self.pygame.Rect(margin,
                                             self.window_height // 2 + 2 * button_height + 2 * self.BUTTON_PADDING,
                                             button_width,
                                             button_height)
 
         hover_start = start_button_rect.collidepoint(self.pygame.mouse.get_pos())
         hover_cpu = against_cpu_rect.collidepoint(self.pygame.mouse.get_pos())
-        hover_quit = quit_button_rect.collidepoint(self.pygame.mouse.get_pos())
+        hover_load = load_game_rect.collidepoint(self.pygame.mouse.get_pos())
 
         # Draw the background
         self.screen.fill(BACKGROUND)
@@ -229,10 +229,30 @@ class GameDisplay:
         # Draw buttons
         self.draw_button("Start Game", start_button_rect, hover_start)
         self.draw_button("CPU", against_cpu_rect, hover_cpu)
-        self.draw_button("Quit", quit_button_rect, hover_quit)
+        self.draw_button("View Game", load_game_rect, hover_load)
 
         self.pygame.display.flip()
-        return hover_start, hover_cpu, hover_quit
+        return hover_start, hover_cpu, hover_load
+
+    def display_loaded_games(self):
+        button_width = self.grid_size // 1.5
+        button_height = 50
+        margin = self.window_width // 2 - button_width // 2
+
+        # Draw the background
+        self.screen.fill(BACKGROUND)
+
+        index = 0
+        buttons = []
+        options = []
+        for entry in os.listdir("saved_games/"):
+            buttons.append(self.pygame.Rect(margin, self.window_height // (index + 1.5), button_width, button_height))
+            options.append(buttons[index].collidepoint(self.pygame.mouse.get_pos()))
+            self.draw_button(entry, buttons[index], options[index])
+            index += 1
+
+        self.pygame.display.flip()
+        return options
 
     def display_options(self):
         button_width = self.grid_size // 2
